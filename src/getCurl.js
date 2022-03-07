@@ -36,9 +36,11 @@ const getPage = async ( url, proxy ) => {
     const proxies = await getProxies(connection, UA, AL);
 
     if (list && Array.isArray(list) && list.length > 0 && proxies && Array.isArray(proxies) && proxies.length > 0) {
-      let table = '';
+      let table = [];
+      let i = 0;
       for await(const item of list) {
         const { url } = item;
+        table[i] = '';
         for await (const proxy of proxies) {
           /*const [res1, res2] = await Promise.all([
             getPage(url, `https://${proxy.item.ip}:${proxy.item.port}`),
@@ -48,15 +50,32 @@ const getPage = async ( url, proxy ) => {
           console.info(`statusCode ${res1.statusCode} ${res1.body}`);
           console.info(`statusCode ${res2.statusCode} ${res2.body}`);
           */
-          table = `${table}curl --proxy "${proxy.item.ip}:${proxy.item.port}" -i ${url}
+          table[i] = `${table[i]}curl --proxy "${proxy.item.ip}:${proxy.item.port}" -i ${url}
 `;
         }
+        i++;
       }
-      console.info(table);
-      fs.promises.writeFile(path.join(__dirname, './list.sh'), table, {encoding: 'utf8'}, (error) => {
+
+      i = 0;
+      let shell= '';
+      for await(const item of table) {
+        await fs.promises.writeFile(path.join(__dirname, `../data/list${i}.sh`), item, {encoding: 'utf8'}, (error) => {
           if (error) {
               console.error(error);
           }
+          
+        });
+        shell = `${shell}./data/list${i}.sh &
+`;
+        i++;
+      }
+      shell = `${shell}wait`;
+      console.info(`run : ${shell}`);
+      await fs.promises.writeFile(path.join(__dirname, `run.txt`), shell, {encoding: 'utf8'}, (error) => {
+        if (error) {
+            console.error(error);
+        }
+        
       });
     }
 

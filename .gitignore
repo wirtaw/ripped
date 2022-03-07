@@ -6,4 +6,6 @@ src/ws/data.jsonl
 report.*.json
 .DS_Store
 src/.DS_Store
-src/list.sh
+src/*.sh
+data/*.sh
+src/run.txt
