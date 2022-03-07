@@ -1,0 +1,9 @@
+.idea/
+node_modules
+src/ws/data.jsonl
+.vscode/
+.env
+report.*.json
+.DS_Store
+src/.DS_Store
+src/list.sh
