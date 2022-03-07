@@ -1,4 +1,5 @@
-const { URLSearchParams } = require('url');
+
+const {URLSearchParams} = require('url');
 const urlM = require('url');
 const https = require('https');
 const httpfollow = require('follow-redirects').http;
@@ -24,7 +25,7 @@ class Connection {
         'Cache-Control': 'no-cache',
         'User-Agent': userAgent.userAgent() || '',
         'Accept-Language': acceptLanguage.acceptLanguage() || '',
-        'Cookie': ''
+        'Cookie': '',
       },
     };
   }
@@ -44,7 +45,7 @@ class Connection {
     console.dir(options, {depth: 2});
 
     return new Promise((resolve, reject) => {
-      const result = { statusCode: null, body: null };
+      const result = {statusCode: null, body: null};
       const req = https.request(options, response => {
         console.info(`"response" event! ${response.statusCode}`);
         const encoding = 'utf8';
@@ -115,7 +116,7 @@ class Connection {
   async getPageWithAgent(url, cookie, al, ua) {
     const options = urlM.parse(url);
     const isSecureProtocol = (options.protocol === 'https:');
-    const protocolPackage = (isSecureProtocol) ? https: http;
+    const protocolPackage = (isSecureProtocol) ? https : http;
 
     if (this.proxy && isSecureProtocol) {
       const agentOptions = urlM.parse(this.proxy);
@@ -139,7 +140,7 @@ class Connection {
       pragma: 'no-cache',
       'User-Agent': ua || userAgent.userAgent() || '',
       'Accept-Language': al || acceptLanguage.acceptLanguage() || '',
-      'cookie': cookie
+      'cookie': cookie,
     };
 
     options.method = 'GET';
@@ -151,7 +152,7 @@ class Connection {
     // debugger;
 
     return new Promise((resolve, reject) => {
-      const result = { statusCode: null, body: null, headers: null };
+      const result = {statusCode: null, body: null, headers: null};
       const req = protocolPackage.request(options, response => {
         console.info(`"response" event! ${response.statusCode}`);
         const encoding = 'utf8';
@@ -218,7 +219,7 @@ class Connection {
         reject(result);
       });
     }).catch((exp) => {
-      const result = { statusCode: null, body: null, headers: null };
+      const result = {statusCode: null, body: null, headers: null};
       result.error = true;
       result.message = exp.toString();
       console.dir(exp, {depth: 2});
@@ -230,7 +231,7 @@ class Connection {
   async getPageWithSocksAgent(url, cookie, al, ua, headers) {
     const options = urlM.parse(url);
     const isSecureProtocol = (options.protocol === 'https:');
-    const protocolPackage = (isSecureProtocol) ? shttps: shttp;
+    const protocolPackage = (isSecureProtocol) ? shttps : shttp;
 
     options.timeout = 2000;
     options.connectTimeout = 1000;
@@ -242,7 +243,7 @@ class Connection {
       'User-Agent': ua || userAgent.userAgent() || '',
       'Accept-Language': al || acceptLanguage.acceptLanguage() || '',
       'cookie': cookie,
-      ...headers
+      ...headers,
     };
 
     options.method = 'GET';
@@ -252,7 +253,7 @@ class Connection {
     // debugger;
 
     return new Promise((resolve, reject) => {
-      const result = { statusCode: null, body: null, headers: null };
+      const result = {statusCode: null, body: null, headers: null};
       const req = protocolPackage.request(options, response => {
         console.info(`'${url}' "response" event! ${response.statusCode}`);
         const encoding = 'utf8';
@@ -280,7 +281,6 @@ class Connection {
         });
 
         response.on('end', () => {
-
           try {
             response.body = null;
 
@@ -328,14 +328,14 @@ class Connection {
     }).catch((err) => {
       const errMsg = err.message || '';
       console.error(`Failed to request ${JSON.stringify(options)} ${errMsg}`);
-      return { statusCode: null, body: null, headers: null };
+      return {statusCode: null, body: null, headers: null};
     });
   }
 
   async getPageWithHeaders(url, cookie, al, ua, headers, path) {
     const optionsParse = urlM.parse(url);
     const isSecureProtocol = (optionsParse.protocol === 'https:');
-    const protocolPackage = (isSecureProtocol) ? https: httpfollow;
+    const protocolPackage = (isSecureProtocol) ? https : httpfollow;
 
     const options = {
       ...optionsParse,
@@ -347,7 +347,7 @@ class Connection {
         'cache-control': 'no-cache',
         'User-Agent': ua || userAgent.userAgent() || '',
         'Accept-Language': al || acceptLanguage.acceptLanguage() || '',
-        'Cookie': cookie
+        'Cookie': cookie,
       },
     };
     debugger;
@@ -364,8 +364,8 @@ class Connection {
       options.tunnel = true;
     }
 
-    //options.timeout = 2000;
-    //options.connectTimeout = 1000;
+    // options.timeout = 2000;
+    // options.connectTimeout = 1000;
 
     if (this.proxy && isSecureProtocol) {
       options.secureProtocol = 'TLSv1_2_method';
@@ -375,7 +375,7 @@ class Connection {
     // debugger;
 
     return new Promise((resolve, reject) => {
-      const result = { statusCode: null, body: null, headers: null };
+      const result = {statusCode: null, body: null, headers: null};
       // console.log('options: ' + JSON.stringify(options));
 
       debugger;
@@ -448,17 +448,17 @@ class Connection {
     }).catch((err) => {
       const errMsg = err.message || '';
       console.error(`Failed to request ${JSON.stringify(options)} ${errMsg}`);
-      return { statusCode: null, body: null, headers: null };
+      return {statusCode: null, body: null, headers: null};
     });
   }
 
   async postRequestWithAgent(url, cookie, al, ua, proxy) {
     const options = urlM.parse(url);
     const isSecureProtocol = (options.protocol === 'https:');
-    const protocolPackage = (isSecureProtocol) ? https: http;
+    const protocolPackage = (isSecureProtocol) ? https : http;
 
     const data = JSON.stringify({
-      proxy
+      proxy,
     });
 
     if (this.proxy && isSecureProtocol) {
@@ -477,20 +477,19 @@ class Connection {
       accept: 'application/json',
       'User-Agent': ua || userAgent.userAgent() || '',
       'Accept-Language': al || acceptLanguage.acceptLanguage() || '',
-      'Content-Length': data.length
+      'Content-Length': data.length,
     };
-
 
     options.method = 'POST';
     if (this.proxy && isSecureProtocol) {
       options.secureProtocol = 'TLSv1_2_method';
     }
 
-    console.dir(options, { depth: 2 });
+    console.dir(options, {depth: 2});
     // debugger;
 
     return new Promise((resolve, reject) => {
-      const result = { statusCode: null, body: null, headers: null };
+      const result = {statusCode: null, body: null, headers: null};
       const req = protocolPackage.request(options, response => {
         console.info(`"response" event! ${response.statusCode}`);
         const encoding = 'utf8';
@@ -558,7 +557,6 @@ class Connection {
         reject(result);
       });
     }).catch(() => {});
-
   }
 }
 

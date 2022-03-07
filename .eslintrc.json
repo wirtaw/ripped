@@ -1,0 +1,10 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "extends": "loopback",
+  "rules": {
+    "max-len": [2, 120, 8]
+  }
+}

@@ -1,3 +1,4 @@
+
 const acceptLanguageList = require('./acceptLanguageList');
 
 const acceptLanguage = () => {
@@ -5,4 +6,4 @@ const acceptLanguage = () => {
   return acceptLanguageList[random];
 };
 
-module.exports = { acceptLanguage };
+module.exports = {acceptLanguage};

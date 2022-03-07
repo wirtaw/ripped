@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict';
-
 const {
   performance,
 } = require('perf_hooks');
@@ -11,7 +9,7 @@ const autocannon = require('autocannon');
 const URLS = ['https://www.rubaltic.ru/', 'https://ria.ru', 'https://savelife.pw/', 'https://mediametrics.ru/'];
 const DURATION = 60;
 
-async function main (url) {
+async function main(url) {
   console.info(`Start cannon against ${url} `);
 
   const start = performance.now();
@@ -24,22 +22,21 @@ async function main (url) {
     requests: [
       {
         method: 'GET',
-        path: '/'
-      }
-    ]
+        path: '/',
+      },
+    ],
   }, finishedBench);
 
   autocannon.track(instance);
 
   // this is used to kill the instance on CTRL-C
   process.once('SIGINT', () => {
-    instance.stop()
+    instance.stop();
   });
 
-  function finishedBench (err, res) {
+  function finishedBench(err, res) {
     if (err) {
       console.error(err.message);
-      
     } else {
       console.info(`${res.url} `, res.statusCodeStats);
 
@@ -61,9 +58,9 @@ async function main (url) {
   try {
     await Promise.all(URLS.map((item) => main(item)));
 
-    //setInterval(async () => {
+    // setInterval(async () => {
     //  await Promise.all(URLS.map((item) => main(item)));
-    //}, DURATION * 1000 + 20);
+    // }, DURATION * 1000 + 20);
 
     const end = performance.now();
     const used = process.memoryUsage();
@@ -80,8 +77,8 @@ async function main (url) {
         error: errMsg,
       });
     setInterval(async () => {
-      await main(url);
-    }, DURATION * 1000  + 20);
+      await Promise.all(URLS.map((item) => main(item)));
+    }, DURATION * 1000 + 20);
 
     process.exit(1);
   }

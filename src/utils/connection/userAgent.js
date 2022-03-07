@@ -1,3 +1,4 @@
+
 const userAgentList = require('./userAgentList');
 
 const userAgent = () => {
@@ -5,4 +6,4 @@ const userAgent = () => {
   return userAgentList[random];
 };
 
-module.exports = { userAgent };
+module.exports = {userAgent};

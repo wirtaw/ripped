@@ -1,3 +1,4 @@
+
 const cheerio = require('cheerio');
 
 const cleanLine = (text) => {
@@ -14,10 +15,6 @@ const getProxyTable = html => {
   const $ = cheerio.load(html);
   const rows = $('#tbl_proxy_list tbody tr');
 
-  // console.dir(rows, {depth: 1});
-  console.info(`table ${rows.length} `);
-  
-
   rows.each((i, row) => {
     if (row.children.length === 15 && row.name === 'tr') {
       const item = {ip: '', port: ''};
@@ -25,9 +22,9 @@ const getProxyTable = html => {
 
       row.children.forEach(column => {
         if (counter === 1 && column.type === 'tag') {
-          item.ip = 
-          (column?.children[1]?.children[1]?.type && column?.children[1]?.children[1]?.children[0]?.data) 
-          ? cleanLine(column.children[1].children[1].children[0].data) : '';
+          item.ip =
+          (column && column?.children[1]?.children[1]?.type && column?.children[1]?.children[1]?.children[0]?.data) ?
+            cleanLine(column.children[1].children[1].children[0].data) : '';
         }
         if (counter === 3 && column.type === 'tag') {
           item.port = (column.children[0].type === 'text') ? column.children[0].data.trim() : '';
@@ -35,15 +32,14 @@ const getProxyTable = html => {
 
         counter++;
       });
-      
 
-      list.push({ index: i, item });
+      list.push({index: i, item});
     }
   });
 
   return list;
 };
 
-module.exports = { 
-    getProxyTable
+module.exports = {
+  getProxyTable,
 };

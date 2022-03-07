@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "get_curl": "node src/getCurl.js"
+    "get_curl": "node src/getCurl.js",
+    "eslint": "eslint ./src/",
+    "eslint:fix": "eslint ./src/ --fix"
   },
   "keywords": [],
   "author": "Poplavskij Vladimir <float45@gmail.com>",
@@ -17,5 +19,9 @@
     "https-proxy-agent": "^5.0.0",
     "socks5-http-client": "^1.0.4",
     "socks5-https-client": "^1.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.10.0",
+    "eslint-config-loopback": "^13.1.0"
   }
 }
