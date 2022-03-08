@@ -5,28 +5,11 @@ const {
 } = require('perf_hooks');
 const fs = require('fs');
 const path = require('path');
-const {Worker} = require('worker_threads');
 
 const {getListOfEnabled, getProxies} = require('./utils');
 const Connection = require('./utils/connection/Connection');
 const userAgent = require('./utils/connection/userAgent');
 const acceptLanguage = require('./utils/connection/acceptLanguage');
-
-function runService(workerData) {
-  return new Promise((resolve, reject) => {
-    const worker = new Worker(
-      './src/worker.js', {workerData},
-    );
-    worker.on('message', resolve);
-    worker.on('error', reject);
-    worker.on('exit', (code) => {
-      if (code !== 0)
-        reject(new Error(
-          `Stopped the Worker Thread with the exit code: ${code}`,
-        ));
-    });
-  });
-}
 
 (async () => {
   const dt = new Date();
@@ -50,15 +33,6 @@ function runService(workerData) {
         const {url} = item;
         table[i] = '';
         for await (const proxy of proxies) {
-          if (i === list.length - 1) {
-            const [res1, res2] = await Promise.all([
-              runService({url, proxy: `https://${proxy.item.ip}:${proxy.item.port}`}),
-              runService({url, proxy: `http://${proxy.item.ip}:${proxy.item.port}`}),
-            ]);
-
-            console.info(`statusCode ${res1.statusCode} ${res1.body}`);
-            console.info(`statusCode ${res2.statusCode} ${res2.body}`);
-          }
           table[i] = `${table[i]}curl --proxy "${proxy.item.ip}:${proxy.item.port}" -i ${url}
 `;
         }

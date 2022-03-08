@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "get_curl": "node src/getCurl.js",
+    "run_workers": "node src/runWorkers.js",
     "eslint": "eslint ./src/",
     "eslint:fix": "eslint ./src/ --fix"
   },
